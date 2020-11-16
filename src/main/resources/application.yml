@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: twm-mongo-service
+
+  data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:10717}
+
+
+server:
+  port: ${EUREKA_REGISTRATION_PORT:12345}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:2012/eureka}
+  instance:
+    preferIpAddress: true

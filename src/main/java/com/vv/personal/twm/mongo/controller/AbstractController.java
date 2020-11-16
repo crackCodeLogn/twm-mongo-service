@@ -1,8 +1,8 @@
 package com.vv.personal.twm.mongo.controller;
 
+import com.mongodb.client.MongoDatabase;
 import com.vv.personal.twm.mongo.config.MongoSpringConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
  * @author Vivek
@@ -13,9 +13,10 @@ public abstract class AbstractController {
     @Autowired
     private MongoSpringConfig mongoSpringConfig;
 
-    public MongoTemplate getDbSpecificMongo(String database) {
-        return new MongoTemplate(mongoSpringConfig.mongoClient(), database);
+    public MongoDatabase getDbSpecificMongo(String database) {
+        return mongoSpringConfig.mongoClient().getDatabase(database);
     }
+
 
 }
 

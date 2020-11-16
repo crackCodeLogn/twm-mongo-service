@@ -9,7 +9,7 @@ spring:
 
 
 server:
-  port: ${EUREKA_REGISTRATION_PORT:12345}
+  port: ${EUREKA_REGISTRATION_PORT:0}
 
 eureka:
   client:

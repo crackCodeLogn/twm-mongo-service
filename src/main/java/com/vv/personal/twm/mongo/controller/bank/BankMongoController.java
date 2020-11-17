@@ -4,6 +4,7 @@ import com.mongodb.client.MongoDatabase;
 import com.vv.personal.twm.artifactory.bank.Bank;
 import com.vv.personal.twm.mongo.controller.AbstractController;
 import com.vv.personal.twm.mongo.interaction.BankCrud;
+import com.vv.personal.twm.mongo.util.JsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -66,16 +67,21 @@ public class BankMongoController extends AbstractController {
                            @RequestParam(value = "value", required = false) String value) {
         LOGGER.info("Received {} to list for field {}", value, field);
         try {
+            String result;
             switch (field) {
                 case "NAME":
-                    return BankCrud().listAllByName(value);
+                    result = BankCrud().listAllByName(value);
+                    break;
                 case "TYPE":
-                    return BankCrud().listAllByType(value);
+                    result = BankCrud().listAllByType(value);
+                    break;
                 case "IFSC":
-                    return BankCrud().listByIfsc(value);
+                    result = BankCrud().listByIfsc(value);
+                    break;
                 default:
-                    return BankCrud().listAll();
+                    result = BankCrud().listAll();
             }
+            return JsonConverter.convertToJson(result);
         } catch (Exception e) {
             LOGGER.error("Failed to list {}: {} from mongo! ", field, value, e);
         }

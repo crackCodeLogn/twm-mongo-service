@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController("controllerMain")
 @RequestMapping("/mongo")
+@Deprecated
 public class Controller {
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 

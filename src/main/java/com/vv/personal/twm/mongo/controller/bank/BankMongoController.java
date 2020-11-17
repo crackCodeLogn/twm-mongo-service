@@ -4,14 +4,11 @@ import com.mongodb.client.MongoDatabase;
 import com.vv.personal.twm.artifactory.bank.Bank;
 import com.vv.personal.twm.mongo.controller.AbstractController;
 import com.vv.personal.twm.mongo.interaction.BankCrud;
-import com.vv.personal.twm.mongo.util.JsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Singleton;
 
 import static com.vv.personal.twm.mongo.constants.Constants.DB_BANK;
 
@@ -23,7 +20,6 @@ import static com.vv.personal.twm.mongo.constants.Constants.DB_BANK;
 @RequestMapping("/mongo/bank")
 @Configuration
 public class BankMongoController extends AbstractController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(BankMongoController.class);
 
     @Bean
@@ -32,7 +28,7 @@ public class BankMongoController extends AbstractController {
     }
 
     @Bean
-    @Singleton
+    //@Singleton //Marking as @Configuration resolved the status of @Bean to singleton - imp learning
     public BankCrud BankCrud() {
         LOGGER.info("Creating Bank Crud now");
         return new BankCrud(BankMongoDatabase());
@@ -67,7 +63,7 @@ public class BankMongoController extends AbstractController {
                            @RequestParam(value = "value", required = false) String value) {
         LOGGER.info("Received {} to list for field {}", value, field);
         try {
-            String result;
+            String result; //list of json binded in a list
             switch (field) {
                 case "NAME":
                     result = BankCrud().listAllByName(value);
@@ -81,7 +77,7 @@ public class BankMongoController extends AbstractController {
                 default:
                     result = BankCrud().listAll();
             }
-            return JsonConverter.convertToJson(result);
+            return result;
         } catch (Exception e) {
             LOGGER.error("Failed to list {}: {} from mongo! ", field, value, e);
         }

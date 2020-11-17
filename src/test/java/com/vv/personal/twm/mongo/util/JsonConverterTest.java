@@ -27,7 +27,9 @@ public class JsonConverterTest {
         list.add(bank1.toString());
         list.add(bank2.toString());
 
+        System.out.println(list.toString());
         String json = convertToJson(list);
+        System.out.println(json);
         assertEquals("[\"{\\\"name\\\":\\\"TR1\\\",\\\"type\\\":\\\"PRIVATE\\\",\\\"IFSC\\\":\\\"TRN1234\\\",\\\"contactNumber\\\":1213131}\",\"{\\\"name\\\":\\\"TR2\\\",\\\"type\\\":\\\"PRIVATE\\\",\\\"IFSC\\\":\\\"TRN12344\\\",\\\"contactNumber\\\":12131231}\"]", json);
     }
 }

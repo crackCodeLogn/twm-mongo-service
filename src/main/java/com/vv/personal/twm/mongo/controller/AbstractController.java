@@ -3,11 +3,16 @@ package com.vv.personal.twm.mongo.controller;
 import com.mongodb.client.MongoDatabase;
 import com.vv.personal.twm.mongo.config.MongoSpringConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import static com.vv.personal.twm.mongo.constants.Constants.DB_BANK;
 
 /**
  * @author Vivek
  * @since 16/11/20
  */
+@Configuration
 public abstract class AbstractController {
 
     @Autowired
@@ -17,6 +22,10 @@ public abstract class AbstractController {
         return mongoSpringConfig.mongoClient().getDatabase(database);
     }
 
+    @Bean
+    public MongoDatabase BankMongoDatabase() {
+        return getDbSpecificMongo(DB_BANK);
+    }
 
 }
 

@@ -1,7 +1,6 @@
 package com.vv.personal.twm.mongo.controller.bank;
 
-import com.mongodb.client.MongoDatabase;
-import com.vv.personal.twm.artifactory.bank.Bank;
+import com.vv.personal.twm.artifactory.generated.bank.BankProto;
 import com.vv.personal.twm.mongo.controller.AbstractController;
 import com.vv.personal.twm.mongo.interaction.BankCrud;
 import org.slf4j.Logger;
@@ -9,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
-
-import static com.vv.personal.twm.mongo.constants.Constants.DB_BANK;
 
 /**
  * @author Vivek
@@ -23,11 +20,6 @@ public class BankMongoController extends AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BankMongoController.class);
 
     @Bean
-    public MongoDatabase BankMongoDatabase() {
-        return getDbSpecificMongo(DB_BANK);
-    }
-
-    @Bean
     //@Singleton //Marking as @Configuration resolved the status of @Bean to singleton - imp learning
     public BankCrud BankCrud() {
         LOGGER.info("Creating Bank Crud now");
@@ -35,7 +27,7 @@ public class BankMongoController extends AbstractController {
     }
 
     @PostMapping("/addBank")
-    public String addBank(@RequestBody Bank newBank) {
+    public String addBank(@RequestBody BankProto.Bank newBank) {
         LOGGER.info("Received new bank to be added to Mongo: {}", newBank);
         try {
             if (BankCrud().add(newBank)) return "OK";

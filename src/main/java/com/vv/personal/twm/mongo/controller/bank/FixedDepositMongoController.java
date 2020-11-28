@@ -57,7 +57,7 @@ public class FixedDepositMongoController extends AbstractController {
     @GetMapping("/getFds")
     public FixedDepositProto.FixedDepositList getFds(@RequestParam("field") String field,
                                                      @RequestParam(value = "value", required = false) String value) {
-        LOGGER.info("Received '{}' to list for field '{}'", value, field);
+        LOGGER.info("Received '{}' to list Fixed Deposits for field '{}'", value, field);
         FixedDepositProto.FixedDepositList.Builder fixedDeposits = FixedDepositProto.FixedDepositList.newBuilder();
         List<String> result = new ArrayList<>();
         try {

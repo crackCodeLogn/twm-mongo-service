@@ -57,7 +57,7 @@ public class BankMongoController extends AbstractController {
     @GetMapping("/getBanks")
     public BankProto.BankList getBanks(@RequestParam("field") String field,
                                        @RequestParam(value = "value", required = false) String value) {
-        LOGGER.info("Received {} to list for field {}", value, field);
+        LOGGER.info("Received '{}' to list Banks for field '{}'", value, field);
         BankProto.BankList.Builder banks = BankProto.BankList.newBuilder();
         List<String> result = new ArrayList<>();
         try {

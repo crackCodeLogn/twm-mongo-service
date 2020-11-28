@@ -17,6 +17,8 @@ import java.io.IOException;
 /**
  * @author Vivek
  * @since 16/11/20
+ * <p>
+ * Thinking of shifting this to artifactory method
  */
 public class JsonConverter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonConverter.class);

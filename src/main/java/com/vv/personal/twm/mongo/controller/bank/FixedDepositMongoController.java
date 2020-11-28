@@ -1,6 +1,5 @@
 package com.vv.personal.twm.mongo.controller.bank;
 
-import com.vv.personal.twm.artifactory.KeyUtil;
 import com.vv.personal.twm.artifactory.generated.deposit.FixedDepositProto;
 import com.vv.personal.twm.mongo.controller.AbstractController;
 import com.vv.personal.twm.mongo.interaction.FdCrud;
@@ -27,18 +26,18 @@ public class FixedDepositMongoController extends AbstractController {
         return new FdCrud(BankMongoDatabase());
     }
 
-    @PostMapping("/addFD")
+    @PostMapping("/addFd")
     public String addFd(@RequestBody FixedDepositProto.FixedDeposit newFd) {
         LOGGER.info("Received new FD to be added to Mongo: {}", newFd);
         try {
             if (FdCrud().add(newFd)) return "OK";
         } catch (Exception e) {
-            LOGGER.error("Failed to add {} to mongo! ", KeyUtil.generateFdKey(newFd), e);
+            LOGGER.error("Failed to add {} to mongo! ", newFd.getKey(), e);
         }
         return "FAILED";
     }
 
-    @PostMapping("/deleteFD")
+    @PostMapping("/deleteFd")
     public String deleteFd(@RequestBody String fdKey) {
         LOGGER.info("Received FD-Key to delete: {}", fdKey);
         try {

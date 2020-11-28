@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.regex;
 import static com.vv.personal.twm.mongo.constants.Constants.COLLECTION_BANKS;
 
 /**
@@ -69,10 +68,6 @@ public class BankCrud extends Crud {
     //list-type
     public String listAllByType(String bankType) {
         return queryOn(getTypeFilter(bankType));
-    }
-
-    private Bson getRegexFilterOnColumn(String column, String data) {
-        return regex(column, data, "i"); //i -> ignore case
     }
 
     private Bson getIfscFilter(String ifsc) {

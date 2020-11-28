@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.regex;
+
 /**
  * @author Vivek
  * @since 16/11/20
@@ -50,5 +52,9 @@ public abstract class Crud {
 
     protected FindIterable<Document> query(Bson filter) {
         return mongoCollection.find(filter);
+    }
+
+    protected Bson getRegexFilterOnColumn(String column, String data) {
+        return regex(column, data, "i"); //i -> ignore case
     }
 }

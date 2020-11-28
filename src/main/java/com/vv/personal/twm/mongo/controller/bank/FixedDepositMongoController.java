@@ -44,7 +44,7 @@ public class FixedDepositMongoController extends AbstractController {
             FdCrud().deleteOne(fdKey);
             return "OK";
         } catch (Exception e) {
-            LOGGER.error("Failed to delete IFSC: {} from mongo! ", fdKey, e);
+            LOGGER.error("Failed to delete FD: {} from mongo! ", fdKey, e);
         }
         return "FAILED";
     }
@@ -57,7 +57,7 @@ public class FixedDepositMongoController extends AbstractController {
         try {
             String result; //list of json binded in a list
             switch (field) {
-                case "NAME":
+                case "BANK-SHORT":
                     result = FdCrud().listAllByName(value);
                     break;
                 case "KEY":

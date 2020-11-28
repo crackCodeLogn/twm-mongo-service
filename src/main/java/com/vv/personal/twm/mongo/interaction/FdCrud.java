@@ -9,9 +9,6 @@ import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static com.mongodb.client.model.Filters.eq;
 import static com.vv.personal.twm.mongo.constants.Constants.COLLECTION_FD;
 
@@ -31,7 +28,7 @@ public class FdCrud extends Crud {
         LOGGER.info("new FD doc: {}", newFd.toString());
         if (checkIfFdExists(newFd.getKey())) return false;
 
-        String json = JsonConverter.convertToJson(newFd);
+        String json = JsonConverter.convertToFdJson(newFd);
         Document bsonConverted = Document.parse(json);
         mongoCollection.insertOne(bsonConverted);
         LOGGER.info("Addition op completed");
@@ -54,43 +51,21 @@ public class FdCrud extends Crud {
 
     //list-all
     public String listAll() {
-        triggerCollectionRead();
-        List<String> compilation = new LinkedList<>();
-        for (Document search : mongoCollection.find()) {
-            compilation.add(search.toJson());
-        }
-        LOGGER.info("Search query completed for 'ALL'");
-        return compilation.toString();
+        return queryAll();
     }
 
     //list-name
-    public String listAllByName(String bankName) {
-        triggerCollectionRead();
-        List<String> compilation = new LinkedList<>();
-        for (Document search : query(getNameFilter(bankName))) {
-            compilation.add(search.toJson());
-        }
-        LOGGER.info("Search query completed for {}", bankName);
-        return compilation.toString();
+    public String listAllByName(String fdBankName) {
+        return queryOn(getRegexFilterOnColumn("bankIFSC", fdBankName));
     }
 
     //list-ifsc
     public String listByKey(String fdKey) {
-        triggerCollectionRead();
-        List<String> compilation = new LinkedList<>();
-        for (Document search : query(getFdKeyFilter(fdKey))) {
-            compilation.add(search.toJson());
-        }
-        LOGGER.info("Search query completed for {}", fdKey);
-        return compilation.toString();
+        return queryOn(getFdKeyFilter(fdKey));
     }
 
     private Bson getFdKeyFilter(String key) {
         return eq("key", key);
-    }
-
-    private Bson getNameFilter(String name) {
-        return eq("bank", name);
     }
 
     private boolean checkIfFdExists(String key) {

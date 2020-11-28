@@ -1,6 +1,8 @@
 package com.vv.personal.twm.mongo.util;
 
+import com.vv.personal.twm.artifactory.FixedDepositKeyUtil;
 import com.vv.personal.twm.artifactory.generated.bank.BankProto;
+import com.vv.personal.twm.artifactory.generated.deposit.FixedDepositProto;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.vv.personal.twm.artifactory.generated.bank.BankProto.BankType.PRIVATE;
-import static com.vv.personal.twm.mongo.util.JsonConverter.convertToBankJson;
-import static com.vv.personal.twm.mongo.util.JsonConverter.convertToJson;
+import static com.vv.personal.twm.mongo.util.JsonConverter.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -45,6 +46,28 @@ public class JsonConverterTest {
                 "  \"bankType\": \"PRIVATE\",\n" +
                 "  \"IFSC\": \"TRN1234\",\n" +
                 "  \"contactNumber\": \"1213131\"\n" +
+                "}", json);
+    }
+
+    @Test
+    public void testConvertToFdJson() {
+        FixedDepositProto.FixedDeposit.Builder fdB = FixedDepositProto.FixedDeposit.newBuilder()
+                .setUser("V2").setBankIFSC("TRN1234").setDepositAmount(9999.99).setRateOfInterest(9.9).setStartDate("20201128")
+                .setMonths(25).setDays(1).setInterestType(FixedDepositProto.InterestType.ON_MATURITY).setNominee("--")
+                .setInsertionTime(Long.MAX_VALUE);
+        FixedDepositProto.FixedDeposit fd = fdB.setKey(FixedDepositKeyUtil.generateFdKey(fdB)).build();
+        String json = convertToFdJson(fd);
+        assertEquals("{\n" +
+                "  \"user\": \"V2\",\n" +
+                "  \"bankIFSC\": \"TRN1234\",\n" +
+                "  \"depositAmount\": 9999.99,\n" +
+                "  \"rateOfInterest\": 9.9,\n" +
+                "  \"startDate\": \"20201128\",\n" +
+                "  \"months\": 25,\n" +
+                "  \"days\": 1,\n" +
+                "  \"nominee\": \"--\",\n" +
+                "  \"insertionTime\": \"9223372036854775807\",\n" +
+                "  \"key\": \"V2-TRN1234-9999.99-20201128-9223372036854775807\"\n" +
                 "}", json);
     }
 }

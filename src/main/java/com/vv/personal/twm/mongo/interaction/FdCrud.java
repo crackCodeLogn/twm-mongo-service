@@ -9,6 +9,8 @@ import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static com.mongodb.client.model.Filters.eq;
 import static com.vv.personal.twm.mongo.constants.Constants.COLLECTION_FD;
 
@@ -50,17 +52,17 @@ public class FdCrud extends Crud {
     }
 
     //list-all
-    public String listAll() {
+    public List<String> listAll() {
         return queryAll();
     }
 
     //list-name
-    public String listAllByName(String fdBankName) {
+    public List<String> listAllByName(String fdBankName) {
         return queryOn(getRegexFilterOnColumn("bankIFSC", fdBankName));
     }
 
     //list-ifsc
-    public String listByKey(String fdKey) {
+    public List<String> listByKey(String fdKey) {
         return queryOn(getFdKeyFilter(fdKey));
     }
 

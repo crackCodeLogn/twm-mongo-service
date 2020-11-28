@@ -9,6 +9,8 @@ import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static com.mongodb.client.model.Filters.eq;
 import static com.vv.personal.twm.mongo.constants.Constants.COLLECTION_BANKS;
 
@@ -29,7 +31,7 @@ public class BankCrud extends Crud {
         LOGGER.info("new bank doc: {}", newBank.toString());
         if (checkIfBankExistsOnIfsc(newBank.getIFSC())) return false;
 
-        String json = JsonConverter.convertToBankJson(newBank);
+        String json = JsonConverter.convertProtoToBankJson(newBank);
         Document bsonConverted = Document.parse(json);
         mongoCollection.insertOne(bsonConverted);
         LOGGER.info("Addition op completed");
@@ -51,22 +53,22 @@ public class BankCrud extends Crud {
     }
 
     //list-all
-    public String listAll() {
+    public List<String> listAll() {
         return queryAll();
     }
 
     //list-name
-    public String listAllByName(String bankName) {
+    public List<String> listAllByName(String bankName) {
         return queryOn(getRegexFilterOnColumn("name", bankName));
     }
 
     //list-ifsc
-    public String listByIfsc(String ifsc) {
+    public List<String> listByIfsc(String ifsc) {
         return queryOn(getIfscFilter(ifsc));
     }
 
     //list-type
-    public String listAllByType(String bankType) {
+    public List<String> listAllByType(String bankType) {
         return queryOn(getTypeFilter(bankType));
     }
 

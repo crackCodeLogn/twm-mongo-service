@@ -3,11 +3,15 @@ package com.vv.personal.twm.mongo.controller.bank;
 import com.vv.personal.twm.artifactory.generated.deposit.FixedDepositProto;
 import com.vv.personal.twm.mongo.controller.AbstractController;
 import com.vv.personal.twm.mongo.interaction.FdCrud;
+import com.vv.personal.twm.mongo.util.JsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Vivek
@@ -50,26 +54,33 @@ public class FixedDepositMongoController extends AbstractController {
     }
 
     //read
-    @GetMapping("/getFDs")
-    public String getFds(@RequestParam("field") String field,
-                         @RequestParam(value = "value", required = false) String value) {
-        LOGGER.info("Received {} to list for field {}", value, field);
+    @GetMapping("/getFds")
+    public FixedDepositProto.FixedDepositList getFds(@RequestParam("field") String field,
+                                                     @RequestParam(value = "value", required = false) String value) {
+        LOGGER.info("Received '{}' to list for field '{}'", value, field);
+        FixedDepositProto.FixedDepositList.Builder fixedDeposits = FixedDepositProto.FixedDepositList.newBuilder();
+        List<String> result = new ArrayList<>();
         try {
-            String result; //list of json binded in a list
             switch (field) {
                 case "BANK-SHORT":
                     result = FdCrud().listAllByName(value);
                     break;
-                case "KEY":
+                case "KEY": //TODO -- replace with constants, which are to be placed in the artifactory
                     result = FdCrud().listByKey(value);
                     break;
                 default:
                     result = FdCrud().listAll();
             }
-            return result;
         } catch (Exception e) {
             LOGGER.error("Failed to list {}: {} from mongo! ", field, value, e);
         }
-        return "FAILED";
+        result.forEach(document -> {
+            try {
+                fixedDeposits.addFixedDeposits(JsonConverter.convertToFixedDepositProto(document));
+            } catch (Exception e) {
+                LOGGER.error("Failed to convert '{}' to proto. ", document, e);
+            }
+        });
+        return fixedDeposits.build();
     }
 }

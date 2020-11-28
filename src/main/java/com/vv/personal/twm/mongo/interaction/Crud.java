@@ -34,20 +34,20 @@ public abstract class Crud {
         LOGGER.info("Number of documents in collection '{}': {}", COLLECTION, mongoCollection.countDocuments());
     }
 
-    protected String queryOn(Bson filter) {
+    protected List<String> queryOn(Bson filter) {
         triggerCollectionRead();
         List<String> compilation = new LinkedList<>();
         query(filter).forEach((Block<? super Document>) document -> compilation.add(document.toJson()));
         LOGGER.info("Search query completed for '{}', with {} results", filter, compilation.size());
-        return compilation.toString();
+        return compilation;
     }
 
-    protected String queryAll() {
+    protected List<String> queryAll() {
         triggerCollectionRead();
         List<String> compilation = new LinkedList<>();
         mongoCollection.find().forEach((Block<? super Document>) document -> compilation.add(document.toJson()));
         LOGGER.info("Search query completed for '{}', with {} results", "ALL", compilation.size());
-        return compilation.toString();
+        return compilation;
     }
 
     protected FindIterable<Document> query(Bson filter) {

@@ -40,13 +40,21 @@ public class JsonConverterTest {
     @Test
     public void testConvertToBankJson() {
         BankProto.Bank bank1 = BankProto.Bank.newBuilder().setName("TR1").setBankType(PRIVATE).setIFSC("TRN1234").setContactNumber("1213131").build();
-        String json = convertToBankJson(bank1);
+        String json = convertProtoToBankJson(bank1);
         assertEquals("{\n" +
                 "  \"name\": \"TR1\",\n" +
                 "  \"bankType\": \"PRIVATE\",\n" +
                 "  \"IFSC\": \"TRN1234\",\n" +
                 "  \"contactNumber\": \"1213131\"\n" +
                 "}", json);
+    }
+
+    @Test
+    public void testConvertToBankProto() {
+        String bankjson = "{\"_id\": {\"$oid\": \"5fb39dd260aa712cb5fbfeb3\"}, \"name\": \"TRN1\", \"bankType\": \"GOVT\", \"IFSC\": \"TRNJ3424242\", \"contactNumber\": \"239248294892\"}";
+        BankProto.Bank bank = convertToBankProto(bankjson);
+        System.out.println(bank);
+        assertEquals("TRNJ3424242", bank.getIFSC());
     }
 
     @Test
@@ -69,5 +77,13 @@ public class JsonConverterTest {
                 "  \"insertionTime\": \"9223372036854775807\",\n" +
                 "  \"key\": \"V2-TRN1234-9999.99-20201128-9223372036854775807\"\n" +
                 "}", json);
+    }
+
+    @Test
+    public void testConvertToFixedDepositProto() {
+        String singleFdJson = "{\"_id\": {\"$oid\": \"5fc258b69a3f0c0e51938737\"}, \"user\": \"V2\", \"bankIFSC\": \"HDFC0000411\", \"depositAmount\": 250000.0, \"rateOfInterest\": 5.3, \"startDate\": \"20201128\", \"months\": 25, \"days\": 1, \"nominee\": \"MV\", \"insertionTime\": \"1606572180000\", \"key\": \"V2-HDFC0000411-250000.00-20201128-1606572180000\"}";
+        FixedDepositProto.FixedDeposit fd = convertToFixedDepositProto(singleFdJson);
+        System.out.println(fd);
+        assertEquals("V2-HDFC0000411-250000.00-20201128-1606572180000", fd.getKey());
     }
 }

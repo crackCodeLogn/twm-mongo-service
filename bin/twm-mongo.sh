@@ -5,6 +5,7 @@ TWM_PARAM=""
 
 BIN_PATH=$TWM_HOME_PARENT/TWM/$APP_NAME/bin     #TWM-HOME-PARENT :: exported in .bashrc
 JAR_PATH=$BIN_PATH/../target/$APP_NAME-$APP_VERSION.jar
+PARAMS=$JAVA_PARAM" "$TWM_PARAM
 
-echo "Starting '$APP_NAME' with java param: '$JAVA_PARAM', at '$JAR_PATH'"
-java $JAVA_PARAM $TWM_PARAM -jar $JAR_PATH
+echo "Starting '$APP_NAME' with params: '$PARAMS', at '$JAR_PATH'"
+java $PARAMS -jar $JAR_PATH

@@ -9,6 +9,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.vv.personal.twm.artifactory.generated.bank.BankProto;
 import com.vv.personal.twm.artifactory.generated.deposit.FixedDepositProto;
+import com.vv.personal.twm.artifactory.generated.tw.VillaProto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,34 @@ public class JsonConverter {
             JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
         } catch (InvalidProtocolBufferException e) {
             LOGGER.error("Failed to convert {} to FD proto. ", json, e);
+        }
+        return builder.build();
+    }
+
+    private static final GsonBuilder TW_GSON_BUILDER = new GsonBuilder();
+    private static final Gson TW_GSON = TW_GSON_BUILDER.registerTypeAdapter(VillaProto.Villa.class, new TypeAdapter<VillaProto.Villa>() {
+
+        @Override
+        public void write(JsonWriter jsonWriter, VillaProto.Villa villa) throws IOException {
+            jsonWriter.jsonValue(JsonFormat.printer().print(villa));
+        }
+
+        @Override
+        public VillaProto.Villa read(JsonReader jsonReader) throws IOException {
+            return null;
+        }
+    }).create();
+
+    public static String convertToVillaJson(VillaProto.Villa villaObject) {
+        return TW_GSON.toJson(villaObject);
+    }
+
+    public static VillaProto.Villa convertToVillaProto(String json) {
+        VillaProto.Villa.Builder builder = VillaProto.Villa.newBuilder();
+        try {
+            JsonFormat.parser().ignoringUnknownFields().merge(json, builder);
+        } catch (InvalidProtocolBufferException e) {
+            LOGGER.error("Failed to convert {} to Vislla proto. ", json, e);
         }
         return builder.build();
     }

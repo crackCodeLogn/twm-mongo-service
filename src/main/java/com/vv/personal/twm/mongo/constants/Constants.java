@@ -10,4 +10,7 @@ public class Constants {
     public static final String DB_BANK = "twm-bank";
     public static final String COLLECTION_BANKS = "banks";
     public static final String COLLECTION_FD = "fixedDeposits";
+
+    public static final String DB_TW = "twm-tw";
+    public static final String COLLECTION_VILLAS = "villas";
 }

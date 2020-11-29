@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static com.vv.personal.twm.mongo.constants.Constants.DB_BANK;
+import static com.vv.personal.twm.mongo.constants.Constants.DB_TW;
 
 /**
  * @author Vivek
@@ -25,6 +26,11 @@ public abstract class AbstractController {
     @Bean
     public MongoDatabase BankMongoDatabase() {
         return getDbSpecificMongo(DB_BANK);
+    }
+
+    @Bean
+    public MongoDatabase TWMongoDatabase() {
+        return getDbSpecificMongo(DB_TW);
     }
 
 }

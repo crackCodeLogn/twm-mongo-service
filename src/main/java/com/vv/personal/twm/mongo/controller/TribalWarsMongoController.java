@@ -19,8 +19,8 @@ import java.util.List;
 @RestController("TribalWarsMongoController")
 @RequestMapping("/mongo/tw")
 @Configuration
-public class TribalWarsController extends AbstractController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TribalWarsController.class);
+public class TribalWarsMongoController extends AbstractController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TribalWarsMongoController.class);
 
     @Bean
     //@Singleton //Marking as @Configuration resolved the status of @Bean to singleton - imp learning

@@ -36,7 +36,7 @@ public class FixedDepositMongoController extends AbstractController {
         try {
             if (FdCrud().add(newFd)) return "OK";
         } catch (Exception e) {
-            LOGGER.error("Failed to add {} to mongo! ", newFd.getKey(), e);
+            LOGGER.error("Failed to add {} to mongo! ", newFd.getFdNumber(), e);
         }
         return "FAILED";
     }

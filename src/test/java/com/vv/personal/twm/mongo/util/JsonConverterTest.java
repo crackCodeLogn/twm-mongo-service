@@ -1,6 +1,5 @@
 package com.vv.personal.twm.mongo.util;
 
-import com.vv.personal.twm.artifactory.FixedDepositKeyUtil;
 import com.vv.personal.twm.artifactory.generated.bank.BankProto;
 import com.vv.personal.twm.artifactory.generated.deposit.FixedDepositProto;
 import org.junit.Ignore;
@@ -60,30 +59,31 @@ public class JsonConverterTest {
     @Test
     public void testConvertToFdJson() {
         FixedDepositProto.FixedDeposit.Builder fdB = FixedDepositProto.FixedDeposit.newBuilder()
-                .setUser("V2").setBankIFSC("TRN1234").setDepositAmount(9999.99).setRateOfInterest(9.9).setStartDate("20201128")
-                .setMonths(25).setDays(1).setInterestType(FixedDepositProto.InterestType.ON_MATURITY).setNominee("--")
-                .setInsertionTime(Long.MAX_VALUE);
-        FixedDepositProto.FixedDeposit fd = fdB.setKey(FixedDepositKeyUtil.generateFdKey(fdB)).build();
+                .setFdNumber("12356362423").setCustomerId("12424151").setUser("V2").setBankIFSC("TRN1234")
+                .setDepositAmount(9999.99).setRateOfInterest(9.9).setStartDate("20201128").setEndDate("20221228")
+                .setMonths(25).setDays(1).setInterestType(FixedDepositProto.InterestType.ON_MATURITY).setNominee("--");
+        FixedDepositProto.FixedDeposit fd = fdB.build();
         String json = convertToFdJson(fd);
         assertEquals("{\n" +
                 "  \"user\": \"V2\",\n" +
+                "  \"fdNumber\": \"12356362423\",\n" +
+                "  \"customerId\": \"12424151\",\n" +
                 "  \"bankIFSC\": \"TRN1234\",\n" +
                 "  \"depositAmount\": 9999.99,\n" +
                 "  \"rateOfInterest\": 9.9,\n" +
                 "  \"startDate\": \"20201128\",\n" +
+                "  \"endDate\": \"20221228\",\n" +
                 "  \"months\": 25,\n" +
                 "  \"days\": 1,\n" +
-                "  \"nominee\": \"--\",\n" +
-                "  \"insertionTime\": \"9223372036854775807\",\n" +
-                "  \"key\": \"V2-TRN1234-9999.99-20201128-9223372036854775807\"\n" +
+                "  \"nominee\": \"--\"\n" +
                 "}", json);
     }
 
     @Test
-    public void testConvertToFixedDepositProto() {
+    public void testConvertToFixedDepositProto_old() {
         String singleFdJson = "{\"_id\": {\"$oid\": \"5fc258b69a3f0c0e51938737\"}, \"user\": \"V2\", \"bankIFSC\": \"HDFC0000411\", \"depositAmount\": 250000.0, \"rateOfInterest\": 5.3, \"startDate\": \"20201128\", \"months\": 25, \"days\": 1, \"nominee\": \"MV\", \"insertionTime\": \"1606572180000\", \"key\": \"V2-HDFC0000411-250000.00-20201128-1606572180000\"}";
         FixedDepositProto.FixedDeposit fd = convertToFixedDepositProto(singleFdJson);
         System.out.println(fd);
-        assertEquals("V2-HDFC0000411-250000.00-20201128-1606572180000", fd.getKey());
+        assertEquals("", fd.getFdNumber());
     }
 }

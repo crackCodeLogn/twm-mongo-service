@@ -28,7 +28,7 @@ public class FdCrud extends Crud {
     //create
     public boolean add(FixedDepositProto.FixedDeposit newFd) {
         LOGGER.info("new FD doc: {}", newFd.toString());
-        if (checkIfFdExists(newFd.getKey())) return false;
+        if (checkIfFdExists(newFd.getFdNumber())) return false;
 
         String json = JsonConverter.convertToFdJson(newFd);
         Document bsonConverted = Document.parse(json);

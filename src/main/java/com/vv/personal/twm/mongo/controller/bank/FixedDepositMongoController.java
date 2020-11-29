@@ -6,12 +6,16 @@ import com.vv.personal.twm.mongo.interaction.FdCrud;
 import com.vv.personal.twm.mongo.util.JsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.vv.personal.twm.mongo.constants.Constants.EMPTY_STR;
+import static com.vv.personal.twm.mongo.constants.Constants.SEARCH_ALL;
 
 /**
  * @author Vivek
@@ -23,6 +27,9 @@ import java.util.List;
 public class FixedDepositMongoController extends AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FixedDepositMongoController.class);
 
+    @Autowired
+    private BankMongoController bankMongoController;
+
     @Bean
     //@Singleton //Marking as @Configuration resolved the status of @Bean to singleton - imp learning
     public FdCrud FdCrud() {
@@ -33,10 +40,14 @@ public class FixedDepositMongoController extends AbstractController {
     @PostMapping("/addFd")
     public String addFd(@RequestBody FixedDepositProto.FixedDeposit newFd) {
         LOGGER.info("Received new FD to be added to Mongo: {}", newFd);
-        try {
-            if (FdCrud().add(newFd)) return "OK";
-        } catch (Exception e) {
-            LOGGER.error("Failed to add {} to mongo! ", newFd.getFdNumber(), e);
+        if (bankMongoController.getBanks(SEARCH_ALL, EMPTY_STR).getBanksList().stream().anyMatch(bank -> bank.getIFSC().equals(newFd.getBankIFSC()))) {
+            try {
+                if (FdCrud().add(newFd)) return "OK";
+            } catch (Exception e) {
+                LOGGER.error("Failed to add {} to mongo! ", newFd.getFdNumber(), e);
+            }
+        } else {
+            LOGGER.warn("IFSC code mentioned in new FD '{}' not found in existing bank record! Not adding to DB", newFd.getBankIFSC());
         }
         return "FAILED";
     }

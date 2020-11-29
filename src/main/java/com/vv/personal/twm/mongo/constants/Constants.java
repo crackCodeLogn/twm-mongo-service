@@ -13,4 +13,7 @@ public class Constants {
 
     public static final String DB_TW = "twm-tw";
     public static final String COLLECTION_VILLAS = "villas";
+
+    public static final String EMPTY_STR = "";
+    public static final String SEARCH_ALL = "ALL";
 }

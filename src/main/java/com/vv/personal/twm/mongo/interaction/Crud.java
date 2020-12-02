@@ -27,6 +27,8 @@ public abstract class Crud {
     public Crud(MongoDatabase mongoDatabase, String collection) {
         this.MONGO_DB = mongoDatabase;
         this.COLLECTION = collection;
+
+        triggerCollectionRead(); //to make sure that collections are created if absent
     }
 
     protected void triggerCollectionRead() {

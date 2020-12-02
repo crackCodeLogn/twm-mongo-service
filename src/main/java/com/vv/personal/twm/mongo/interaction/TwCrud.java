@@ -9,6 +9,7 @@ import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -33,6 +34,17 @@ public class TwCrud extends Crud {
         String json = JsonConverter.convertToVillaJson(newVilla);
         Document bsonConverted = Document.parse(json);
         mongoCollection.insertOne(bsonConverted);
+        LOGGER.info("Addition op completed");
+        return true;
+    }
+
+    //create-many
+    public boolean addMany(VillaProto.VillaList villas) {
+        LOGGER.info("New villas size (bytes): {}", villas.getSerializedSize());
+        List<Document> documents = new ArrayList<>(villas.getVillasCount());
+        villas.getVillasList().forEach(villa -> documents.add(Document.parse(JsonConverter.convertToVillaJson(villa))));
+
+        mongoCollection.insertMany(documents);
         LOGGER.info("Addition op completed");
         return true;
     }

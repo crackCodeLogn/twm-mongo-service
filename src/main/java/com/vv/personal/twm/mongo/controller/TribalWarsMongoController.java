@@ -40,6 +40,17 @@ public class TribalWarsMongoController extends AbstractController {
         return "FAILED";
     }
 
+    @PostMapping("/addVillas")
+    public String addVillas(@RequestBody VillaProto.VillaList villaList) {
+        LOGGER.info("Received villas to be added to Mongo: {}", villaList.getVillasCount());
+        try {
+            if (TwCrud().addMany(villaList)) return "OK";
+        } catch (Exception e) {
+            LOGGER.error("Failed to add {} villas to mongo! ", villaList.getVillasCount(), e);
+        }
+        return "FAILED";
+    }
+
     @PostMapping("/deleteVilla")
     public String deleteVilla(@RequestBody String villaKey) {
         LOGGER.info("Received TW-Key to delete: {}", villaKey);

@@ -64,7 +64,7 @@ public class TribalWarsMongoController extends AbstractController {
     }
 
     @GetMapping("/read/all")
-    public VillaProto.VillaList readAllVillasFromMongo(@PathVariable String world) {
+    public VillaProto.VillaList readAllVillasFromMongo(@RequestParam("world") String world) {
         LOGGER.info("Received request to read all villas for world {}", world);
         VillaProto.VillaList.Builder villas = VillaProto.VillaList.newBuilder();
         List<String> result = new ArrayList<>();

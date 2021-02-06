@@ -67,7 +67,7 @@ public class FdCrud extends Crud {
     }
 
     private Bson getFdKeyFilter(String key) {
-        return eq("key", key);
+        return eq("fdNumber", key);
     }
 
     private boolean checkIfFdExists(String key) {

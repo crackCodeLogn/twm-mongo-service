@@ -64,6 +64,20 @@ public class FixedDepositMongoController extends AbstractController {
         return "FAILED";
     }
 
+    @PostMapping("/update-by-replacing")
+    public String updateRecordByReplacing(@RequestBody FixedDepositProto.FixedDeposit fixedDeposit) {
+        LOGGER.info("Going to replace FD with key: {} with updated information", fixedDeposit.getFdNumber());
+        if (deleteFd(fixedDeposit.getFdNumber()).equals("OK")) {
+            if (addFd(fixedDeposit).equals("OK")) {
+                LOGGER.info("Added updated FD details in mongo for key: {}", fixedDeposit.getFdNumber());
+                return "OK";
+            } else {
+                LOGGER.error("Failed to update FD with key: {}", fixedDeposit.getFdNumber());
+            }
+        }
+        return "FAILED";
+    }
+
     //read
     @GetMapping("/getFds")
     public FixedDepositProto.FixedDepositList getFds(@RequestParam("field") String field,
@@ -87,7 +101,7 @@ public class FixedDepositMongoController extends AbstractController {
         }
         result.forEach(document -> {
             try {
-                fixedDeposits.addFixedDeposits(JsonConverter.convertToFixedDepositProto(document));
+                fixedDeposits.addFixedDeposit(JsonConverter.convertToFixedDepositProto(document));
             } catch (Exception e) {
                 LOGGER.error("Failed to convert '{}' to proto. ", document, e);
             }

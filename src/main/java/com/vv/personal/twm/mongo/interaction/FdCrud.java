@@ -57,8 +57,8 @@ public class FdCrud extends Crud {
     }
 
     //list-name
-    public List<String> listAllByName(String fdBankName) {
-        return queryOn(getRegexFilterOnColumn("bankIFSC", fdBankName));
+    public List<String> listByAttribute(String attribute, String value) {
+        return queryOn(getRegexFilterOnColumn(attribute, value));
     }
 
     //list-ifsc

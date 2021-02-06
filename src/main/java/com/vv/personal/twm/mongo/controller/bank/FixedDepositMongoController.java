@@ -86,16 +86,25 @@ public class FixedDepositMongoController extends AbstractController {
         FixedDepositProto.FixedDepositList.Builder fixedDeposits = FixedDepositProto.FixedDepositList.newBuilder();
         List<String> result = new ArrayList<>();
         try {
-            switch (field) {
-                case "BANK-SHORT":
-                    result = FdCrud().listAllByName(value);
+            FixedDepositProto.FilterBy filterBy = FixedDepositProto.FilterBy.valueOf(field);
+            String attribute = EMPTY_STR;
+            switch (filterBy) {
+                case BANK:
+                    attribute = "bankIFSC";
                     break;
-                case "KEY": //TODO -- replace with constants, which are to be placed in the artifactory
+                case USER:
+                    attribute = "user";
+                    break;
+                case ORIGINAL_USER:
+                    attribute = "originalUser";
+                    break;
+                case KEY:
                     result = FdCrud().listByKey(value);
                     break;
                 default:
                     result = FdCrud().listAll();
             }
+            if (!attribute.isEmpty()) result = FdCrud().listByAttribute(attribute, value);
         } catch (Exception e) {
             LOGGER.error("Failed to list {}: {} from mongo! ", field, value, e);
         }
